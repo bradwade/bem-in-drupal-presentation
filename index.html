@@ -1,59 +1,59 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+  <head>
+    <meta charset="utf-8">
 
-		<title>BEM in Drupal by Brad Wade and Brian McMurray</title>
+    <title>BEM in Drupal by Brad Wade and Brian McMurray</title>
 
-		<meta name="description" content="BEM in Drupal">
-		<meta name="author" content="Brad Wade and Brian McMurray">
+    <meta name="description" content="BEM in Drupal">
+    <meta name="author" content="Brad Wade and Brian McMurray">
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
 
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 
     <link rel="stylesheet" href="phase2/phase2.css">
 
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
 
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
 
-	<body>
+  <body>
 
-		<div class="reveal">
+    <div class="reveal">
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
 
 <section data-state="front">
-	<h1>BEM in Drupal</h1>
-	<p>
-		<small>Created by Brad Wade / bwade@phase2technology.com<br>
+  <h1>BEM in Drupal</h1>
+  <p>
+    <small>Created by Brad Wade / bwade@phase2technology.com<br>
             and Brian McMurray / bmcmurray@phase2technology.com
     </small>
-	</p>
+  </p>
   <a href="http://www.phase2technology.com/">
     <img src="phase2/img/p2-logo.png">
   </a>
 </section>
 
 <section>
-	<h2>What is BEM?</h2>
+  <h2>What is BEM?</h2>
 
 <p>BEM (Block, Element, Modifier) is a methodology for determining a website's nomenclature.</p>
 
@@ -70,14 +70,14 @@
 
 <p class="fragment">Similar to SMACCS or other OOCSS.</p>
 
-	<aside class="notes">
+  <aside class="notes">
 In this session we will explain the BEM methodology, how to identify blocks, elements, and modifiers, and our suggested, improved syntax. Then we will dive into tips and tricks of implementing this approach in a Drupal project including how to clean up markup, insert classes, and organize your theme.
-	</aside>
+  </aside>
 </section>
 <section>
 <section>
-		<h2>Why BEM?</h2>
-		<p><strong>Cure for Divitis</strong> You are able to clear out many divs that are there "in case you need them". It is easy to complain about how the markup and class names in Drupal are bloated -- but harder to suggested a good, flexible alternative, solution.
+    <h2>Why BEM?</h2>
+    <p><strong>Cure for Divitis</strong> You are able to clear out many divs that are there "in case you need them". It is easy to complain about how the markup and class names in Drupal are bloated -- but harder to suggested a good, flexible alternative, solution.
 
 <p class="fragment"><strong>Get ready for Drupal 8</strong> It looks like Drupal 8 is adopting a very similar CSS Architecture approach</p>
 
@@ -107,14 +107,14 @@ body.article-node #sidebar .block-3 h3 {
 </section>
 </section>
 <section>
-	<section>
-		<h2>Identifying</h2>
-		<ul>
+  <section>
+    <h2>Identifying</h2>
+    <ul>
       <li>Blocks</li>
       <li>Elements</li>
       <li>Modifiers</li>
-		</ul>
-	</section>
+    </ul>
+  </section>
   <section>
 <img src="images/wire.png">
   </section>
@@ -219,73 +219,178 @@ body.article-node #sidebar .block-3 h3 {
 </code></pre>
   </section>
 </section>
+
+
 <section>
-	<section>
-<h2>BEM classes in Drupal</h2>
-
-<pre><code data-trim contenteditable>
-fancy_functions();
-</code></pre>
+  <section>
+    <h2>Implementing BEM in Drupal7<h2>
+    <ul>
+      <li>Idealism vs Realism</li>
+      <li>Approaches</li>
+    </ul>
   </section>
-	<section>
-<h2>Moar!!!</h2>
+  <section>
+    <h2>Idealism vs Realism</h2>
+    <p>Drupal *gasp* is an opinionated system and isn't going to make everything easy for you when your ideals run counter to its opinions.</p>
+  </section>
+  <section>
+    <h2>Idealism vs Realism</h2>
+    <blockquote>The danger of forcing your idealism on Drupal is creating a system that becomes fragile to upgrades.</blockquote>
+    <p>If you override every core theme function, you're in for a bad time.</p>
+  </section>
+  <section>
+    <h2>Idealism vs Realism</h2>
+    <ul>
+      <li>Choose your battles wisely.</li>
+      <li>Focus on the important output.</li>
+      <li>Document your code!</li>
+    </ul>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Custom Theming Approaches</h2>
+    <ul>
+      <li>Template files</li>
+      <li>Views</li>
+      <li>Panels</li>
+      <li>template.php</li>
+    </ul>
+  </section>
+  <section>
 
-<pre><code data-trim contenteditable>
-super_fancy_functions();
-</code></pre>
-	</section>
+    <pre><code data-trim contenteditable>
+$variables['classes_array'][] = 
+'node--' . $variables['type'] . '--' . $variables['view_mode'] . 
+' node--' . $variables['view_mode'];
+    </code></pre>
+  </section>
+  <section>
+    <h2>Moar!!!</h2>
+
+    <pre><code data-trim contenteditable>
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * Alters the theme registry to insert our preprocess function before
+ * menu_tree's default preprocess function.
+ */
+function YOURTHEME_theme_registry_alter(&$theme_registry) {
+  // Insert a preprocess function before template_preprocess_menu_tree.
+  array_unshift(
+    $theme_registry['menu_tree']['preprocess functions'], 
+    'YOURTHEME_preprocess_bem_menu_tree'
+  );
+}
+/**
+ * Custom preprpocess function to allow us to capture some variables in menu_tree
+ * before `template_preprocess_menu_tree` destroys them.
+ */
+function YOURTHEME_preprocess_bem_menu_tree(&$variables) {
+  $tree = $variables['tree'];
+  $menu_name = FALSE;
+  $depth = FALSE;
+
+  foreach ($tree as $menu_item) {
+    if (is_array($menu_item) && array_key_exists('#original_link', $menu_item)) {
+      $menu_name = $menu_item['#original_link']['menu_name'];
+      $depth = $menu_item['#original_link']['depth'];
+    }
+  }
+
+  if (!empty($menu_name)) {
+    $variables['menu_name'] = $menu_name;
+  }
+  if (!empty($depth)) {
+    $variables['depth'] = $depth;
+  }
+}
+    </code></pre>
+  </section>
+  <section>
+    <pre><code data-trip contenteditable>
+/**
+ * Implements theme_menu_tree().
+ *
+ * @details Adds a unique class to each UL, using variables we 
+ *          have captured with 
+ *          `YOURTHEME_preprpocess_bem_menu_tree()`.
+ */
+function YOURTHEME_menu_tree($variables) {
+  $ul = array(
+    '#theme' => 'html_tag',
+    '#tag' => 'ul',
+    '#value' => $variables['tree'],
+    '#attributes' => array(
+      'class' => array('menu'),
+    ),
+  );
+
+  if (!empty($variables['menu_name'])) {
+    $ul['#attributes']['class'][] = 'menu-'. $variables['menu_name'];
+
+    if (!empty($variables['depth']) && $variables['depth'] > 1) {
+      $ul['#attributes']['class'][] = 
+      'menu-'. $variables['menu_name'] .'--tier'. $variables['depth'];
+    }
+  }
+
+  return drupal_render($ul);
+}
+    </code></pre>
+  </section>
 </section>
 
 <section>
-	<h1>THE END</h1>
-	<h4>BEM in Drupal</h4>
-	<p>
+  <h1>THE END</h1>
+  <h4>BEM in Drupal</h4>
+  <p>
     <small>Created by Brad Wade / bwade@phase2technology.com<br>
             and Brian McMurray / bmcmurray@phase2technology.com
     </small>
-	</p>
+  </p>
   <a href="http://www.phase2technology.com/">
     <img src="phase2/img/p2-logo.png">
   </a>
 </section>
 
-			</div>
+      </div>
 
-		</div>
+    </div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.min.js"></script>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
 
-		<script>
+    <script>
 
-			// Full list of configuration options available here:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				history: true,
-				center: true,
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
 
-				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
-				// Parallax scrolling
-				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
-				// parallaxBackgroundSize: '2100px 900px',
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
 
-				// Optional libraries used to extend on reveal.js
-				dependencies: [
-					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
           { src: 'phase2/branding.js', async: true, condition: function() {return !!document.body.classList; } }
-				]
-			});
+        ]
+      });
 
-		</script>
+    </script>
 
-	</body>
+  </body>
 </html>
