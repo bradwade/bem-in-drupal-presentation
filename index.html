@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>BEM in Drupal by Brad Wade and Brian McMurray</title>
 
 		<meta name="description" content="BEM in Drupal">
 		<meta name="author" content="Brad Wade and Brian McMurray">
@@ -55,41 +55,168 @@
 <section>
 	<h2>What is BEM?</h2>
 
+<p>BEM (Block, Element, Modifier) is a methodology for determining a website's nomenclature.</p>
+
+<p>It helps you create ideal, semantic markup and class names that provide designers, frontend, and backend programmers the same terms to communicate with one another.</p>
+
+<p>It helps achieve more organized, reusable, and maintainable code. It provides front end developers with rich, specific information about what they are styling.</p>
+</section>
+<section>
+  <h2>Where did it come from?</h2>
+
+<p>BEM was developed by a group of Russian programmers working for Yandex company.</p>
+
+<p>bem.info</p>
+
+<p class="fragment">Similar to SMACCS or other OOCSS.</p>
+
 	<aside class="notes">
-		Some notes.
+In this session we will explain the BEM methodology, how to identify blocks, elements, and modifiers, and our suggested, improved syntax. Then we will dive into tips and tricks of implementing this approach in a Drupal project including how to clean up markup, insert classes, and organize your theme.
 	</aside>
 </section>
-
+<section>
 <section>
 		<h2>Why BEM?</h2>
-		<p>
-Lorem Ipsum baby.
-		</p>
+		<p><strong>Cure for Divitis</strong> You are able to clear out many divs that are there "in case you need them". It is easy to complain about how the markup and class names in Drupal are bloated -- but harder to suggested a good, flexible alternative, solution.
+
+<p class="fragment"><strong>Get ready for Drupal 8</strong> It looks like Drupal 8 is adopting a very similar CSS Architecture approach</p>
+
+<p class="fragment">CSS architecture (for Drupal 8)<br>https://drupal.org/node/1887918</p>
+
+<p class="fragment"><strong>Reusable components!</strong> Styling of components is not based on context/location. Therefore moving a component between pages, content types, from the sidebar to footer or repeating it multiple times on a page should not affect the styling.
+</section>
+<section>
+<h2>Why BEM?</h2>
+<p>Maintainable
+<p>Readable
+<p>Predictable
+<p>Team scalability
+
+<pre class=fragment><code data-trim contenteditable>
+body.article-node #sidebar .block-3 h3 {
+  padding-left: 15px;
+}
+
+</code></pre>
+<pre class=fragment><code data-trim contenteditable>
+.newsletter-cta__heading {
+  padding-left: 15px;
+}
+</code></pre>
+
+</section>
 </section>
 <section>
 	<section>
-		<h2>BEM Details</h2>
-		<p>
-Lorem Ipsum.
-		</p>
-    <p class="fragment">
-      Ipsum Lorem
-    </p>
+		<h2>Identifying</h2>
+		<ul>
+      <li>Blocks</li>
+      <li>Elements</li>
+      <li>Modifiers</li>
+		</ul>
 	</section>
   <section>
-<pre><code data-trim contenteditable>
-/* example code */
-.sample-component__sample-element--sample-modifier {
-  color: red;
-}
-</code></pre>
+<img src="images/wire.png">
+  </section>
+  <section>
+<img src="images/wire-annotated.png">
+  </section>
+  <section>
+<img src="images/tab-block.jpg">
+  </section>
+  <section>
+<img src="images/tab-block-annotated.jpg">
+  </section>
+  <section>
+<img src="images/tab-block-blue.jpg">
+  </section>
+  <section>
+<img src="images/tab-block-bottom.jpg">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Naming Blocks</h2>
+    <p>Block names must be globally unique.
+    <p class="fragment">Use a single dash for multi-word block names.
+    <p class="fragment"><strong>Keep it Semantic!</strong> We don't need to add styling information into classes. We can maintain seperation of styling and markup. Don't name things based on styling or position/context.
+    <p class="fragment">Bad: blue-search-bar, sidebar-search, footer-links.
+    <p class="fragment">Naming is hard. Don't get bogged down. Try to name quickly and move on.
   </section>
   <section>
 <pre><code data-trim contenteditable>
-/* example code 2 */
-.sample-component__sample-element--sample-modifier {
-  color: blue;
-}
+/* example block/component names */
+.logo {}
+.pager {}
+.tab-block {}
+.main-menu {}
+</code></pre>
+  </section>
+<section>
+  <h2>Pager example</h2>
+  <<&nbsp;&nbsp;&nbsp;&nbsp;<&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp;&nbsp;>>
+</section>
+  <section>
+<pre><code data-trim contenteditable>
+&lt;ul class=&quot;pager&quot;&gt;
+  &lt;li&gt;First&lt;/li&gt;
+  &lt;li&gt;Previous&lt;/li&gt;
+  &lt;li&gt;3&lt;/li&gt;
+  &lt;li&gt;Next&lt;/li&gt;
+  &lt;li&gt;Last&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+  </section>
+
+  <section>
+    <h2>Naming Elements</h2>
+    <p>Element names only need to be unique within the component.
+    <p class="fragment">Use a single dash for multi-word element names.
+    <p class="fragment">Add the element name to the end of the block name and use a double <strong>underscore</strong> to separate the two.
+  </section>
+<section>
+  <h2>Pager example</h2>
+  <<&nbsp;&nbsp;&nbsp;&nbsp;<&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp;&nbsp;>>
+</section>
+  <section>
+<pre><code data-trim contenteditable>
+&lt;ul class=&quot;pager&quot;&gt;
+  &lt;li class=&quot;pager__control&quot;&gt;First&lt;/li&gt;
+  &lt;li class=&quot;pager__control&quot;&gt;Previous&lt;/li&gt;
+  &lt;li class=&quot;pager__current-page&gt;3&lt;/li&gt;
+  &lt;li class=&quot;pager__control&quot;&gt;Next&lt;/li&gt;
+  &lt;li class=&quot;pager__control&quot;&gt;Last&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+  </section>
+  <section>
+    <h2>Naming Modifiers</h2>
+    <p>Modifiers
+    <p class="fragment">Use a single dash for multi-word element names.
+    <p class="fragment">Add the modifier name to the end of the block or element use a double <strong>dash</strong> to separate.
+    <p class="fragment">Modifiers can have a type and value for example:<br>
+      size-small<br>
+      size-large<br>
+      position-first<br>
+      position-last<br>
+      depth-2<br>
+      depth-3<br>
+      state-active<br>
+      priority-normal<br>
+      priority-important<br>
+      priority-critical<br>
+      status-active<br>
+  </section>
+  <section>
+<pre><code data-trim contenteditable>
+&lt;ul class=&quot;pager&quot;&gt;
+  &lt;li class=&quot;pager__control pager__control--first&quot;&gt;First&lt;/li&gt;
+  &lt;li class=&quot;pager__control pager__control--previous&quot;&gt;Previous&lt;/li&gt;
+  &lt;li class=&quot;pager__current-page&gt;3&lt;/li&gt;
+  &lt;li class=&quot;pager__control pager__control--next&quot;&gt;Next&lt;/li&gt;
+  &lt;li class=&quot;pager__control pager__control--last&quot;&gt;Last&lt;/li&gt;
+&lt;/ul&gt;
 </code></pre>
   </section>
 </section>
