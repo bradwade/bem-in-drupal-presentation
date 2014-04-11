@@ -325,45 +325,88 @@ body.article-node #sidebar .block-3 h3 {
 
   <section>
     <h2>Implement BEM in: <strong>template.php</strong></h2>
-    
+    <ul>
+      <li><p><code>template.php</code> is the heart of your theme. Using <code>process_</code> and <code>preprocess_</code> functions will help you massage Drupal's output and can compliment the previous approaches.</p></li>
+      <li><p>Implement <code>theme_</code> function overrides to further massage and alter Drupal's default HTML output. This can be useful for modifying output that doesn't run through the other methods, like menu trees, pagers, etc.</p></li>
   </section>
 
   <section>
-
-    <pre><code data-trim contenteditable>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <p>Add BEM classes to your nodes in <code>YOURTHEME_preprocess_node(&amp;$variables)</code>.</p>
+    <pre><code data-trim>
+&lt;?php 
 $variables['classes_array'][] = 
 'node--' . $variables['type'] . '--' . $variables['view_mode'] . 
 ' node--' . $variables['view_mode'];
     </code></pre>
   </section>
   <section>
-    <h2>Moar!!!</h2>
-
-    <pre><code data-trim contenteditable>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p><strong>The Problem:</strong> Drupal outputs menus all over using <code>menu_tree()</code> and <code>theme('menu_tree')</code> but the HTML output isn't BEM-y.</p>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p><strong>The Problem Gets Harder:</strong> Our ideal menu markup includes the depth and the menu's name as part of the BEM classes, but those aren't in the <code>$variables</code> available to us in <code>theme_menu_tree</code></p>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p><strong>Our ideal markup:</strong> <br/> <img src="images/bem-menus.png" /></p>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p>First, we need the menu name and depth available to us, but they aren't in <code>$variables</code>. In fact, they were available but were removed in <a href="https://api.drupal.org/api/drupal/includes%21menu.inc/function/template_preprocess_menu_tree/7"><code>template_preprocess_menu_tree()</code></a>.</p>
+    <pre><code data-trim>
+&lt;?php 
+function template_preprocess_menu_tree(&amp;$variables) {
+  $variables['tree'] = $variables['tree']['#children'];
+}
+    </code></pre>
+    <p>To fix this, we have to alter the theme registry</p>
+  </section>
+    
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p> We alter the theme registry and prepend a new preprocess function <em>before</em> <code>template_preprocess_menu_tree()</code>.</p>
+    <pre><code data-trim>
+&lt;?php 
 /**
  * Implements hook_theme_registry_alter().
  *
  * Alters the theme registry to insert our preprocess function before
  * menu_tree's default preprocess function.
  */
-function YOURTHEME_theme_registry_alter(&$theme_registry) {
+function YOURTHEME_theme_registry_alter(&amp;$theme_registry) {
   // Insert a preprocess function before template_preprocess_menu_tree.
   array_unshift(
     $theme_registry['menu_tree']['preprocess functions'], 
     'YOURTHEME_preprocess_bem_menu_tree'
   );
 }
+    </code></pre>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p>The preprocess function grabs the <code>menu_name</code> and the <code>depth</code> 
+      from the original tree and saves them as new <code>$variables</code> for use in the theme implementation.</p>
+    <pre><code data-trim style="font-size: 15px; line-height: 17px; letter-spacing: 1px;">
+&lt;?php 
 /**
  * Custom preprpocess function to allow us to capture some variables in menu_tree
  * before `template_preprocess_menu_tree` destroys them.
  */
-function YOURTHEME_preprocess_bem_menu_tree(&$variables) {
+function YOURTHEME_preprocess_bem_menu_tree(&amp;$variables) {
   $tree = $variables['tree'];
   $menu_name = FALSE;
   $depth = FALSE;
 
   foreach ($tree as $menu_item) {
-    if (is_array($menu_item) && array_key_exists('#original_link', $menu_item)) {
+    if (is_array($menu_item) &amp;&amp; array_key_exists('#original_link', $menu_item)) {
       $menu_name = $menu_item['#original_link']['menu_name'];
       $depth = $menu_item['#original_link']['depth'];
     }
@@ -379,7 +422,22 @@ function YOURTHEME_preprocess_bem_menu_tree(&$variables) {
     </code></pre>
   </section>
   <section>
-    <pre><code data-trip contenteditable>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p>Drupal's built-in <a href="http://dgo.to/a/theme_menu_tree"><code>theme_menu_tree</code></a> is incredibly basic.</p>
+    <pre><code data-trim>
+&lt;?php 
+function theme_menu_tree($variables) {
+  return '<ul class="menu">' . $variables['tree'] . '</ul>';
+}
+    </code></pre>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p>Simple updates using the newly available variables allows the inclusion of the <code>menu_name</code> and <code>depth</code>.</p>
+    <pre><code data-trim style="font-size: 14px; line-height: 15px; letter-spacing: 0.05em;">
+&lt;?php 
 /**
  * Implements theme_menu_tree().
  *
@@ -399,13 +457,11 @@ function YOURTHEME_menu_tree($variables) {
 
   if (!empty($variables['menu_name'])) {
     $ul['#attributes']['class'][] = 'menu-'. $variables['menu_name'];
-
-    if (!empty($variables['depth']) && $variables['depth'] > 1) {
+    if (!empty($variables['depth']) &amp;&amp; $variables['depth'] > 1) {
       $ul['#attributes']['class'][] = 
       'menu-'. $variables['menu_name'] .'--tier'. $variables['depth'];
     }
   }
-
   return drupal_render($ul);
 }
     </code></pre>
