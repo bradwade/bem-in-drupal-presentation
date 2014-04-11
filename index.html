@@ -348,6 +348,24 @@ $variables['classes_array'][] =
   <section>
     <h2>Implement BEM in: <strong>template.php</strong></h2>
     <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p><strong>Solution:</strong> Implement <code>theme_menu_tree</code>.</p>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
+    <p>Let's see what we have here...<p>
+    <p>Drupal's built-in <a href="http://dgo.to/a/theme_menu_tree"><code>theme_menu_tree</code></a> is incredibly basic.</p>
+    <pre><code data-trim>
+&lt;?php 
+function theme_menu_tree($variables) {
+  return '<ul class="menu">' . $variables['tree'] . '</ul>';
+}
+    </code></pre>
+    <p>The variable <code>tree</code> just contains rendered HTML of the menu tree.</p>
+  </section>
+  <section>
+    <h2>Implement BEM in: <strong>template.php</strong></h2>
+    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
     <p><strong>The Problem Gets Harder:</strong> Our ideal menu markup includes the depth and the menu's name as part of the BEM classes, but those aren't in the <code>$variables</code> available to us in <code>theme_menu_tree</code></p>
   </section>
   <section>
@@ -365,7 +383,7 @@ function template_preprocess_menu_tree(&amp;$variables) {
   $variables['tree'] = $variables['tree']['#children'];
 }
     </code></pre>
-    <p>To fix this, we have to alter the theme registry</p>
+    <p>To fix this, we have to alter the theme registry.</p>
   </section>
     
   <section>
@@ -418,17 +436,6 @@ function YOURTHEME_preprocess_bem_menu_tree(&amp;$variables) {
   if (!empty($depth)) {
     $variables['depth'] = $depth;
   }
-}
-    </code></pre>
-  </section>
-  <section>
-    <h2>Implement BEM in: <strong>template.php</strong></h2>
-    <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
-    <p>Drupal's built-in <a href="http://dgo.to/a/theme_menu_tree"><code>theme_menu_tree</code></a> is incredibly basic.</p>
-    <pre><code data-trim>
-&lt;?php 
-function theme_menu_tree($variables) {
-  return '<ul class="menu">' . $variables['tree'] . '</ul>';
 }
     </code></pre>
   </section>
