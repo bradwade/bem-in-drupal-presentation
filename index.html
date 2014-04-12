@@ -41,7 +41,7 @@
       <div class="slides">
 
 <section data-state="front">
-  <h1>BEM in Drupal</h1>
+  <h1>BEM/OOCSS in Drupal</h1>
   <p>
     <small>Created by Brad Wade / bwade@phase2technology.com<br>
             and Brian McMurray / bmcmurray@phase2technology.com
@@ -254,7 +254,39 @@ body.article-node #sidebar .block-3 h3 {
 </code></pre>
   </section>
 </section>
+<section>
+<section>
+<h2>Unsetting Core CSS</h2>
+  <p>Core CSS uses HTML elements with to great of a specificity. So it would clobber our BEM-y CSS.
 
+  <pre><code data-trim contenteditable>
+/* Example from system.menus.css */
+ul.menu li {
+  margin: 0 0 0 0.5em; /* LTR */
+}
+ul li.expanded {
+  list-style-image: url(../../misc/menu-expanded.png);
+  list-style-type: circle;
+}
+  </code></pre>
+  </section>
+  <section>
+<h2>Unsetting Core CSS</h2>
+<p>Refer to non-existant files in your theme's .info file.</p>
+  <pre><code data-trim contenteditable>
+name = Theme name
+description = My sweet theme
+core = 7.x
+
+; STYLESHEETS
+;-------------------------------------------------------------------------------
+stylesheets[all][] = css/style.css
+; Note: removes system so we don't have to override styles.
+stylesheets[all][] = system.menus.css
+stylesheets[all][] = system.theme.css
+  </code></pre>
+  </section>
+</section>
 
 <section>
   <section>
