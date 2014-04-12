@@ -57,9 +57,9 @@
 
 <p>BEM (Block, Element, Modifier) is a methodology for determining a website's nomenclature.</p>
 
-<p>It helps you create ideal, semantic markup and class names that provide designers, frontend, and backend programmers the same terms to communicate with one another.</p>
+<p class="fragment">It helps you create ideal, semantic markup and class names that provide designers, frontend, and backend programmers the same terms to communicate with one another.</p>
 
-<p>It helps achieve more organized, reusable, and maintainable code. It provides front end developers with rich, specific information about what they are styling.</p>
+<p class="fragment">It helps achieve more organized, reusable, and maintainable code. It provides front end developers with rich, specific information about what they are styling.</p>
 </section>
 <section>
   <h2>Where did it come from?</h2>
@@ -69,9 +69,7 @@
 <p>bem.info</p>
 
 <p class="fragment">Similar to SMACCS or other OOCSS.</p>
-
   <aside class="notes">
-In this session we will explain the BEM methodology, how to identify blocks, elements, and modifiers, and our suggested, improved syntax. Then we will dive into tips and tricks of implementing this approach in a Drupal project including how to clean up markup, insert classes, and organize your theme.
   </aside>
 </section>
 <section>
@@ -218,6 +216,43 @@ body.article-node #sidebar .block-3 h3 {
 &lt;/ul&gt;
 </code></pre>
   </section>
+  <section>
+<pre><code data-trim contenteditable>
+.pager {
+  @include horizontal-list();
+}
+
+.pager__current-page {
+  font-weight: bold;
+}
+
+.pager__control {
+  @include hide-text();
+  display: block;
+  background: url("images/sprite.png") 0 0;
+  width: 20px;
+  height: 20px;
+  margin-right:5px;
+  padding: 0px;
+}
+
+.pager__control--first {
+  background-position: 0 0px;
+}
+
+.pager__control--previous {
+  background-position: 0 -30px;
+}
+
+.pager__control--next {
+    background-position: 0 -60px;
+}
+
+.pager__control--last {
+    background-position: 0 -90px;
+}
+</code></pre>
+  </section>
 </section>
 
 
@@ -334,9 +369,9 @@ body.article-node #sidebar .block-3 h3 {
     <h2>Implement BEM in: <strong>template.php</strong></h2>
     <p>Add BEM classes to your nodes in <code>YOURTHEME_preprocess_node(&amp;$variables)</code>.</p>
     <pre><code data-trim>
-&lt;?php 
-$variables['classes_array'][] = 
-'node--' . $variables['type'] . '--' . $variables['view_mode'] . 
+&lt;?php
+$variables['classes_array'][] =
+'node--' . $variables['type'] . '--' . $variables['view_mode'] .
 ' node--' . $variables['view_mode'];
     </code></pre>
   </section>
@@ -356,7 +391,7 @@ $variables['classes_array'][] =
     <p>Let's see what we have here...<p>
     <p>Drupal's built-in <a href="http://dgo.to/a/theme_menu_tree"><code>theme_menu_tree</code></a> is incredibly basic.</p>
     <pre><code data-trim>
-&lt;?php 
+&lt;?php
 function theme_menu_tree($variables) {
   return '<ul class="menu">' . $variables['tree'] . '</ul>';
 }
@@ -378,20 +413,20 @@ function theme_menu_tree($variables) {
     <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
     <p>First, we need the menu name and depth available to us, but they aren't in <code>$variables</code>. In fact, they were available but were removed in <a href="https://api.drupal.org/api/drupal/includes%21menu.inc/function/template_preprocess_menu_tree/7"><code>template_preprocess_menu_tree()</code></a>.</p>
     <pre><code data-trim>
-&lt;?php 
+&lt;?php
 function template_preprocess_menu_tree(&amp;$variables) {
   $variables['tree'] = $variables['tree']['#children'];
 }
     </code></pre>
     <p>To fix this, we have to alter the theme registry.</p>
   </section>
-    
+
   <section>
     <h2>Implement BEM in: <strong>template.php</strong></h2>
     <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
     <p> We alter the theme registry and prepend a new preprocess function <em>before</em> <code>template_preprocess_menu_tree()</code>.</p>
     <pre><code data-trim>
-&lt;?php 
+&lt;?php
 /**
  * Implements hook_theme_registry_alter().
  *
@@ -401,7 +436,7 @@ function template_preprocess_menu_tree(&amp;$variables) {
 function YOURTHEME_theme_registry_alter(&amp;$theme_registry) {
   // Insert a preprocess function before template_preprocess_menu_tree.
   array_unshift(
-    $theme_registry['menu_tree']['preprocess functions'], 
+    $theme_registry['menu_tree']['preprocess functions'],
     'YOURTHEME_preprocess_bem_menu_tree'
   );
 }
@@ -410,10 +445,10 @@ function YOURTHEME_theme_registry_alter(&amp;$theme_registry) {
   <section>
     <h2>Implement BEM in: <strong>template.php</strong></h2>
     <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
-    <p>The preprocess function grabs the <code>menu_name</code> and the <code>depth</code> 
+    <p>The preprocess function grabs the <code>menu_name</code> and the <code>depth</code>
       from the original tree and saves them as new <code>$variables</code> for use in the theme implementation.</p>
     <pre><code data-trim style="font-size: 15px; line-height: 17px; letter-spacing: 1px;">
-&lt;?php 
+&lt;?php
 /**
  * Custom preprpocess function to allow us to capture some variables in menu_tree
  * before `template_preprocess_menu_tree` destroys them.
@@ -444,12 +479,12 @@ function YOURTHEME_preprocess_bem_menu_tree(&amp;$variables) {
     <small>A more in-depth example: Making Drupal output BEM-y menu trees.</small>
     <p>Simple updates using the newly available variables allows the inclusion of the <code>menu_name</code> and <code>depth</code>.</p>
     <pre><code data-trim style="font-size: 14px; line-height: 15px; letter-spacing: 0.05em;">
-&lt;?php 
+&lt;?php
 /**
  * Implements theme_menu_tree().
  *
- * @details Adds a unique class to each UL, using variables we 
- *          have captured with 
+ * @details Adds a unique class to each UL, using variables we
+ *          have captured with
  *          `YOURTHEME_preprpocess_bem_menu_tree()`.
  */
 function YOURTHEME_menu_tree($variables) {
@@ -465,7 +500,7 @@ function YOURTHEME_menu_tree($variables) {
   if (!empty($variables['menu_name'])) {
     $ul['#attributes']['class'][] = 'menu-'. $variables['menu_name'];
     if (!empty($variables['depth']) &amp;&amp; $variables['depth'] > 1) {
-      $ul['#attributes']['class'][] = 
+      $ul['#attributes']['class'][] =
       'menu-'. $variables['menu_name'] .'--tier'. $variables['depth'];
     }
   }
